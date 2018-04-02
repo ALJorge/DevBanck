@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Bancos DevBank</title>
+
+<!-- Bootstrap Core CSS -->
+<link
+	th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"
+	rel="stylesheet" />
+
+<!-- MetisMenu CSS -->
+<link th:href="@{/bower_components/metisMenu/dist/metisMenu.min.css}"
+	rel="stylesheet" />
+
+<!-- Social Buttons CSS -->
+<link
+	th:href="@{/bower_components/bootstrap-social/bootstrap-social.css}"
+	rel="stylesheet">
+
+<!-- DataTables CSS -->
+<link
+	th:href="@{/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css}"
+	rel="stylesheet" />
+
+<!-- DataTables Responsive CSS -->
+<link
+	th:href="@{/bower_components/datatables-responsive/css/dataTables.responsive.css}"
+	rel="stylesheet" />
+
+<!-- Custom CSS -->
+<link th:href="@{/dist/css/sb-admin-2.css}" rel="stylesheet" />
+
+<!-- Custom Fonts -->
+<link
+	th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}"
+	rel="stylesheet" type="text/css" />
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+	<div id="wrapper">
+
+		<nav th:include="menu"></nav>
+
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-8">
+						<h1 class="page-header">Bancos</h1>
+					</div>
+					<div class="col-lg-4">
+						<button class="page-header btn btn-primary btn-lg"
+							data-toggle="modal" data-target="#NewBanco">Nuevo Banco
+						</button>
+					</div>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Lista de Bancos Registrados</div>
+						<!-- /.panel-heading -->
+						<div class="panel-body">
+							<div class="dataTable_wrapper">
+								<table width="100%"
+									class="table table-striped table-bordered table-hover"
+									id="dataTables-example">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Sucursal</th>
+											<th>Direccion</th>
+											<th>Telefono</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="banco :${ban}" class="odd gradeX">
+											<td><span th:text="${banco.BnombreMod}"></span></td>
+											<td><span th:text="${banco.BsucursalMod}"></span></td>
+											<td><span th:text="${banco.BdireccionMod}"></span></td>
+											<td><span th:text="${banco.btelefonoMod}"></span></td>
+											<td>
+											<a class="btn btn-social-icon btn-warning"	data-toggle="modal" th:attr="data-target='#Modifica'+${banco.idMod}"><i class="fa fa-edit"></i></a> 
+											<a class="btn btn-social-icon btn-danger" data-toggle="modal" th:attr="data-target='#elimina'+${banco.BnombreMod}"><i class="fa fa-trash-o"></i></a>
+											</td>
+
+											<!-- mODAL DE ELIMINACION -->
+											<div class="modal fade" th:id="'elimina'+${banco.BnombreMod}" tabindex="-1"	role="dialog" aria-labelledby="myModalLabel"	aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content ">
+
+														<div class="modal-header panel panel-danger">
+															<button type="button" class="close" data-dismiss="modal"
+																aria-hidden="true">&times;</button>
+															<h4 class="modal-title" id="myModalLabel">SEGURO QUE
+																DESEAS ELIMINAR EL BANCO? <span th:text="${banco.BnombreMod}"></span></h4>
+														</div>
+
+														<div class="modal-footer">
+															<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+															<a  th:href="@{/banco/deleteBanco?id=__${banco.idMod}__}" class="btn btn-primary">Guardar</a>
+															
+														</div>
+														</form>
+													</div>
+													<!-- /.modal-content -->
+												</div>
+												<!-- /.modal-dialog -->
+											</div>
+											<!-- fINALIZA MODAL ELIMINACION -->
+
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+							<!-- /.table-responsive -->
+
+						</div>
+						<!-- /.panel-body -->
+					</div>
+					<!-- /.panel -->
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+
+
+	<!-- /#wrapper -->
+
+	<div class="modal fade" id="NewBanco" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog  panel-primary">
+			<div class="modal-content ">
+				<form action="" th:action="@{/banco/addbanco}"
+					th:object="${bancomodel}">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Nuevo Banco</h4>
+					</div>
+					<div class="modal-body">
+
+						<div class="form-group">
+							<label for="nombreb">Nombre Banco</label> <input id="nombreb"
+								class="form-control" type="text" th:field="*{BnombreMod}" />
+						</div>
+						<div class="form-group">
+							<label for="sucursal">Sucursal</label> <input id="sucursal"
+								class="form-control" type="text" th:field="*{BsucursalMod}" />
+						</div>
+						<div class="form-group">
+							<label for="direccion">Direccion</label> <input id="direccion"
+								class="form-control" type="text" th:field="*{BdireccionMod}" />
+						</div>
+						<div class="form-group">
+							<label for="tel">Telefono</label> <input id="tel" type="number"
+								class="form-control" th:field="*{btelefonoMod}" />
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /#wrapper -->
+    
+	
+	<div th:each="bacosup :${banupdate}">
+    
+	<div class="modal fade" th:id="'Modifica'+${bacosup.idMod}" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="  modal-dialog">
+			<div class="modal-content">
+				<form action="" th:action="@{/banco/addbanco}"
+					th:object="${bancomodel}">
+					
+						<div class="modal-header panel panel-warning">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">Modifica Banco</h4>
+						</div>
+					
+
+					<div class="modal-body">
+
+						<div class="form-group">
+							<label for="nombreb1">Nombre Banco</label> <input id="nombreb1" class="form-control" type="text" th:field="*{BnombreMod}" th:value="${bacosup.BnombreMod}"/>
+						</div>
+						<div class="form-group">
+							<label for="sucursal1">Sucursal</label> <input id="sucursal1" th:value="${bacosup.BsucursalMod}"
+								class="form-control" type="text" th:field="*{BsucursalMod}"  />
+						</div>
+						<div class="form-group">
+							<label for="direccion1">Direccion</label> <input id="direccion1"
+								class="form-control" type="text" th:field="*{BdireccionMod}" th:value="${bacosup.BdireccionMod}"  />
+						</div>
+						<div class="form-group">
+							<label for="tel1">Telefono</label> <input id="tel1" type="number"
+								class="form-control" th:field="*{btelefonoMod}" th:value="${bacosup.btelefonoMod}" />
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	</div>
+	<!-- Modal Modificar -->
+
+	<!-- /#wrapper -->
+
+
+	<!-- jQuery -->
+	<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script
+		th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+
+	<!-- Metis Menu Plugin JavaScript -->
+	<script th:src="@{/bower_components/metisMenu/dist/metisMenu.min.js}"></script>
+
+	<!-- DataTables JavaScript -->
+	<script
+		th:src="@{/bower_components/datatables/media/js/jquery.dataTables.min.js}"></script>
+	<script
+		th:src="@{/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js}"></script>
+	<script
+		th:src="@{/bower_components/datatables-responsive/js/dataTables.responsive.js}"></script>
+
+	<!-- Custom Theme JavaScript -->
+	<script th:src="@{/dist/js/sb-admin-2.js}"></script>
+
+	<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+	<script>
+		$(document).ready(function() {
+			$('#dataTables-example').DataTable({
+				responsive : true
+			});
+		});
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="ISO-8859-1" />
+<title>Bancos</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Sucursal</th>
+				<th>Direccion</th>
+				<th>Telefono</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="banco :${ban}">
+				<td><span th:text="${banco.BnombreMod}"></span></td>
+				<td><span th:text="${banco.BsucursalMod}"></span></td>
+				<td><span th:text="${banco.BdireccionMod}"></span></td>
+				<td><span th:text="${banco.btelefonoMod}"></span></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<br><br>
+	<form action="" th:action="@{/banco/addbanco}" th:object="${bancomodel}" >
+	<label for="nombreb">Nombre Banco</label>
+	<input id="nombreb" type="text" th:field="*{BnombreMod}"/>
+	<label for="sucursal">Sucursal</label>
+	<input id="sucursal" type="text" th:field="*{BsucursalMod}"/>
+	<label for="direccion">Direccion</label>
+	<input id="direccion" type="text" th:field="*{BdireccionMod}"/>
+	<label for="tel">Telefono</label>
+	<input id="tel" type="number" th:field="*{btelefonoMod}"/>
+	<br>
+	<input type="submit" value="Guardar">
+	</form>
+</body>
+</html>
